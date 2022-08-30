@@ -1,0 +1,34 @@
+docker commands
+
+backend
+docker run --name goals-backend -d -p 80:80 --rm goals-node
+
+docker run --name goals-backend \
+--network goals-net \
+--rm -d -p 80:80 \
+-v logs:/app/logs \
+-v /app/node_modules \
+-v ${PWD}:/app goals-node
+
+docker run \
+--name goals-backend \
+--network goals-net \
+--rm -d -p 80:80 \
+-v logs:/app/logs \
+-v /app/node_modules \
+-v ${PWD}:/app \
+-e MONGODB_USERNAME=root -e MONGODB_PASSWORD=password goals-node
+
+frontend
+docker run --name goals-frontend --rm -p 3000:3000 -it goals-react
+
+docker run --name goals-frontend -p 3000:3000 --rm -it -v ${PWD}/src:/app/src goals-react
+
+Database
+docker run \
+--name mongodb \
+--rm -d \
+--network goals-net \
+-v data:/data/db \
+-e MONGO_INITDB_ROOT_USERNAME=root \
+-e MONGO_INITDB_ROOT_PASSWORD=password mongo
